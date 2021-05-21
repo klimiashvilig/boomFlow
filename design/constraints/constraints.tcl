@@ -49,15 +49,16 @@ set_driving_cell -no_design_rule \
 # - make this non-zero to avoid hold buffers on input-registered designs
 
 set_input_delay -clock ${clock_name} [expr ${dc_clock_period}/2.0] \
-			[get_ports "reset_wire_reset serial_tl_bits_in_valid serial_tl_bits_in_bits serial_tl_bits_out_ready"]
+			[get_ports "reset_wire_reset"] 
+      # serial_tl_bits_in_valid serial_tl_bits_in_bits serial_tl_bits_out_ready"]
 set_input_delay -clock ${jtag_clock_name} [expr ${jtag_clock_period}/2.0] \
 			[get_ports "jtag_TMS jtag_TDI"]
 
 
 # set_output_delay constraints for output ports
 
-set_output_delay -clock ${clock_name} 0 \
-			[get_ports "serial_tl_clock serial_tl_bits_in_ready serial_tl_bits_out_valid serial_tl_bits_out_bits"]
+# set_output_delay -clock ${clock_name} 0 \
+# 			[get_ports "serial_tl_clock serial_tl_bits_in_ready serial_tl_bits_out_valid serial_tl_bits_out_bits"]
 set_output_delay -clock ${jtag_clock_name} 0 \
 			[get_ports "jtag_TDO_data jtag_TDO_driven"]
 
