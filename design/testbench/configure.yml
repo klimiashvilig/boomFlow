@@ -1,0 +1,22 @@
+# TODO: Set number of vectors parameter in python file and testbench from yml
+
+name: testbench
+
+inputs:
+  - adk
+
+outputs:
+  - testbench.sv
+  - test_vectors.txt
+  - design.args
+  - design.args.gls
+
+commands:
+  - cp AESTopTb.sv outputs/testbench.sv
+  - cp inputs.mem outputs/inputs.mem
+  - cp key.mem outputs/key.mem
+  - cp design.args outputs/design.args
+  - cat design.args.gls inputs/adk/vcs_incdir.txt > outputs/design.args.gls
+
+
+

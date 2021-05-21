@@ -1,0 +1,13 @@
+build_dir: 5-plugin-dc
+build_id: '5'
+commands:
+- 'true'
+edges_i: {}
+edges_o:
+  designer-interface.tcl:
+  - f: designer-interface.tcl
+    step: 9-synopsys-dc-synthesis
+name: plugin-dc
+outputs:
+- designer-interface.tcl
+source: /tmp/ee272b/flow/Final1/design/plugin-dc

@@ -1,0 +1,201 @@
+digraph {
+label="";
+labelloc="t";
+fontsize=60;
+size="8.5;11";
+ratio="fill";
+margin=0;
+pad=1;
+rankdir="TB";
+concentrate=true;
+splines=polyline;
+center=true;
+nodesep=1.2;
+ranksep=0.8;
+cadence_innovus_cts [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_design_sdc> design.sdc | <i_innovus_foundation_flow> innovus-foundation-flow } | \n
+cadence-innovus-cts
+
+\n\n | { <o_design_checkpoint> design.checkpoint } }", color=black ];
+cadence_innovus_eco [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_innovus_foundation_flow> innovus-foundation-flow | <i_innovus_eco_tcl> innovus_eco.tcl } | \n
+cadence-innovus-eco
+
+\n\n | { <o_design_checkpoint> design.checkpoint } }", color=black ];
+cadence_innovus_flowsetup [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_sdc> design.sdc | <i_design_v> design.v | <i_dffram> dffram } | \n
+cadence-innovus-flowsetup
+
+\n\n | { <o_innovus_foundation_flow> innovus-foundation-flow } }", color=black ];
+cadence_innovus_init [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_sdc> design.sdc | <i_design_v> design.v | <i_dffram> dffram | <i_floorplan_tcl> floorplan.tcl | <i_innovus_foundation_flow> innovus-foundation-flow | <i_pin_assignments_tcl> pin-assignments.tcl } | \n
+cadence-innovus-init
+
+\n\n | { <o_design_checkpoint> design.checkpoint } }", color=black ];
+cadence_innovus_place [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_design_sdc> design.sdc | <i_innovus_foundation_flow> innovus-foundation-flow } | \n
+cadence-innovus-place
+
+\n\n | { <o_design_checkpoint> design.checkpoint } }", color=black ];
+cadence_innovus_postcts_hold [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_innovus_foundation_flow> innovus-foundation-flow } | \n
+cadence-innovus-postcts_hold
+
+\n\n | { <o_design_checkpoint> design.checkpoint } }", color=black ];
+cadence_innovus_postroute [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_innovus_foundation_flow> innovus-foundation-flow } | \n
+cadence-innovus-postroute
+
+\n\n | { <o_design_checkpoint> design.checkpoint } }", color=black ];
+cadence_innovus_postroute_hold [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_innovus_foundation_flow> innovus-foundation-flow } | \n
+cadence-innovus-postroute_hold
+
+\n\n | { <o_design_checkpoint> design.checkpoint } }", color=black ];
+cadence_innovus_power [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_design_sdc> design.sdc | <i_innovus_foundation_flow> innovus-foundation-flow } | \n
+cadence-innovus-power
+
+\n\n | { <o_design_checkpoint> design.checkpoint } }", color=black ];
+cadence_innovus_route [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_innovus_foundation_flow> innovus-foundation-flow } | \n
+cadence-innovus-route
+
+\n\n | { <o_design_checkpoint> design.checkpoint } }", color=black ];
+cadence_innovus_signoff [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_innovus_foundation_flow> innovus-foundation-flow } | \n
+cadence-innovus-signoff
+
+\n\n | { <o_design_merged_gds> design-merged.gds | <o_design_checkpoint> design.checkpoint | <o_design_def_gz> design.def.gz | <o_design_gds_gz> design.gds.gz | <o_design_lef> design.lef | <o_design_lvs_v> design.lvs.v | <o_design_pt_sdc> design.pt.sdc | <o_design_rcbest_spef_gz> design.rcbest.spef.gz | <o_design_sdf> design.sdf | <o_design_spef_gz> design.spef.gz | <o_design_vcs_pg_v> design.vcs.pg.v | <o_design_vcs_v> design.vcs.v | <o_design_virtuoso_v> design.virtuoso.v } }", color=black ];
+constraints [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ {  } | \n
+constraints
+
+\n\n | { <o_constraints_tcl> constraints.tcl } }", color=black ];
+floorplan [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ {  } | \n
+floorplan
+
+\n\n | { <o_floorplan_tcl> floorplan.tcl } }", color=black ];
+info [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ {  } | \n
+info
+
+\n\n | {  } }", color=black ];
+macros [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ {  } | \n
+macros
+
+\n\n | { <o_dffram> dffram } }", color=black ];
+mentor_calibre_gdsmerge [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_gds_gz> design.gds.gz } | \n
+mentor-calibre-gdsmerge
+
+\n\n | { <o_design_merged_gds> design_merged.gds } }", color=black ];
+open_icc2innovus [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_icc_eco_tcl> icc_eco.tcl } | \n
+open-icc2innovus
+
+\n\n | { <o_innovus_eco_tcl> innovus_eco.tcl } }", color=black ];
+open_magic_def2spice [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_def_gz> design.def.gz | <i_dffram> dffram } | \n
+open-magic-def2spice
+
+\n\n | { <o_design_extracted_spice> design_extracted.spice } }", color=black ];
+open_magic_drc [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_merged_gds> design_merged.gds } | \n
+open-magic-drc
+
+\n\n | { <o_drc_results_log> drc_results.log } }", color=black ];
+open_netgen_lvs [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_lvs_v> design.lvs.v | <i_design_extracted_spice> design_extracted.spice } | \n
+open-netgen-lvs
+
+\n\n | { <o_lvs_results_log> lvs_results.log } }", color=black ];
+pin_placement [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ {  } | \n
+pin-placement
+
+\n\n | { <o_pin_assignments_tcl> pin-assignments.tcl } }", color=black ];
+plugin_dc [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ {  } | \n
+plugin-dc
+
+\n\n | { <o_designer_interface_tcl> designer-interface.tcl } }", color=black ];
+plugin_dc_retime [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ {  } | \n
+plugin-dc-retime
+
+\n\n | { <o_retime_tcl> retime.tcl } }", color=black ];
+rtl [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ {  } | \n
+rtl
+
+\n\n | { <o_design_v> design.v | <o_design_vcs_v> design.vcs.v } }", color=black ];
+signoff_posteco [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_checkpoint> design.checkpoint | <i_innovus_foundation_flow> innovus-foundation-flow } | \n
+signoff_posteco
+
+\n\n | { <o_design_merged_gds> design-merged.gds | <o_design_checkpoint> design.checkpoint | <o_design_def_gz> design.def.gz | <o_design_gds_gz> design.gds.gz | <o_design_lef> design.lef | <o_design_lvs_v> design.lvs.v | <o_design_pt_sdc> design.pt.sdc | <o_design_rcbest_spef_gz> design.rcbest.spef.gz | <o_design_sdf> design.sdf | <o_design_spef_gz> design.spef.gz | <o_design_vcs_pg_v> design.vcs.pg.v | <o_design_vcs_v> design.vcs.v | <o_design_virtuoso_v> design.virtuoso.v } }", color=black ];
+skywater_130nm [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ {  } | \n
+skywater-130nm
+
+\n\n | { <o_adk> adk } }", color=black ];
+synopsys_dc_synthesis [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_constraints_tcl> constraints.tcl | <i_design_v> design.v | <i_designer_interface_tcl> designer-interface.tcl | <i_dffram> dffram | <i_retime_tcl> retime.tcl | <i_run_saif> run.saif } | \n
+synopsys-dc-synthesis
+
+\n\n | { <o_design_namemap> design.namemap | <o_design_sdc> design.sdc | <o_design_svf> design.svf | <o_design_v> design.v } }", color=black ];
+synopsys_pt_eco [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_pt_sdc> design.pt.sdc | <i_design_spef_gz> design.spef.gz | <i_design_vcs_v> design.vcs.v } | \n
+synopsys-pt-eco
+
+\n\n | { <o_icc_eco_tcl> icc_eco.tcl } }", color=black ];
+synopsys_pt_timing_signoff [ fontsize=24, width=2, penwidth=2, shape=Mrecord, label="{ { <i_adk> adk | <i_design_pt_sdc> design.pt.sdc | <i_design_spef_gz> design.spef.gz | <i_design_vcs_v> design.vcs.v } | \n
+synopsys-pt-timing-signoff
+
+\n\n | { <o_design_sdf> design.sdf } }", color=black ];
+skywater_130nm:o_adk:s -> cadence_innovus_cts:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_place:o_design_checkpoint:s -> cadence_innovus_cts:i_design_checkpoint:n [ arrowsize=2, penwidth=2 ];
+synopsys_dc_synthesis:o_design_sdc:s -> cadence_innovus_cts:i_design_sdc:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_cts:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_eco:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_eco:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+open_icc2innovus:o_innovus_eco_tcl:s -> cadence_innovus_eco:i_innovus_eco_tcl:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_flowsetup:i_adk:n [ arrowsize=2, penwidth=2 ];
+synopsys_dc_synthesis:o_design_sdc:s -> cadence_innovus_flowsetup:i_design_sdc:n [ arrowsize=2, penwidth=2 ];
+synopsys_dc_synthesis:o_design_v:s -> cadence_innovus_flowsetup:i_design_v:n [ arrowsize=2, penwidth=2 ];
+macros:o_dffram:s -> cadence_innovus_flowsetup:i_dffram:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_init:i_adk:n [ arrowsize=2, penwidth=2 ];
+synopsys_dc_synthesis:o_design_sdc:s -> cadence_innovus_init:i_design_sdc:n [ arrowsize=2, penwidth=2 ];
+synopsys_dc_synthesis:o_design_v:s -> cadence_innovus_init:i_design_v:n [ arrowsize=2, penwidth=2 ];
+macros:o_dffram:s -> cadence_innovus_init:i_dffram:n [ arrowsize=2, penwidth=2 ];
+floorplan:o_floorplan_tcl:s -> cadence_innovus_init:i_floorplan_tcl:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_init:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+pin_placement:o_pin_assignments_tcl:s -> cadence_innovus_init:i_pin_assignments_tcl:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_place:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_power:o_design_checkpoint:s -> cadence_innovus_place:i_design_checkpoint:n [ arrowsize=2, penwidth=2 ];
+synopsys_dc_synthesis:o_design_sdc:s -> cadence_innovus_place:i_design_sdc:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_place:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_postcts_hold:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_cts:o_design_checkpoint:s -> cadence_innovus_postcts_hold:i_design_checkpoint:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_postcts_hold:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_postroute:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_route:o_design_checkpoint:s -> cadence_innovus_postroute:i_design_checkpoint:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_postroute:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_postroute_hold:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_postroute:o_design_checkpoint:s -> cadence_innovus_postroute_hold:i_design_checkpoint:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_postroute_hold:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_power:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_init:o_design_checkpoint:s -> cadence_innovus_power:i_design_checkpoint:n [ arrowsize=2, penwidth=2 ];
+synopsys_dc_synthesis:o_design_sdc:s -> cadence_innovus_power:i_design_sdc:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_power:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_route:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_postcts_hold:o_design_checkpoint:s -> cadence_innovus_route:i_design_checkpoint:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_route:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> cadence_innovus_signoff:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_postroute_hold:o_design_checkpoint:s -> cadence_innovus_signoff:i_design_checkpoint:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> cadence_innovus_signoff:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> mentor_calibre_gdsmerge:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_signoff:o_design_gds_gz:s -> mentor_calibre_gdsmerge:i_design_gds_gz:n [ arrowsize=2, penwidth=2 ];
+synopsys_pt_eco:o_icc_eco_tcl:s -> open_icc2innovus:i_icc_eco_tcl:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> open_magic_def2spice:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_signoff:o_design_def_gz:s -> open_magic_def2spice:i_design_def_gz:n [ arrowsize=2, penwidth=2 ];
+macros:o_dffram:s -> open_magic_def2spice:i_dffram:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> open_magic_drc:i_adk:n [ arrowsize=2, penwidth=2 ];
+mentor_calibre_gdsmerge:o_design_merged_gds:s -> open_magic_drc:i_design_merged_gds:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> open_netgen_lvs:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_signoff:o_design_lvs_v:s -> open_netgen_lvs:i_design_lvs_v:n [ arrowsize=2, penwidth=2 ];
+open_magic_def2spice:o_design_extracted_spice:s -> open_netgen_lvs:i_design_extracted_spice:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> signoff_posteco:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_eco:o_design_checkpoint:s -> signoff_posteco:i_design_checkpoint:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_flowsetup:o_innovus_foundation_flow:s -> signoff_posteco:i_innovus_foundation_flow:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> synopsys_dc_synthesis:i_adk:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> synopsys_dc_synthesis:i_adk:n [ arrowsize=2, penwidth=2 ];
+constraints:o_constraints_tcl:s -> synopsys_dc_synthesis:i_constraints_tcl:n [ arrowsize=2, penwidth=2 ];
+rtl:o_design_v:s -> synopsys_dc_synthesis:i_design_v:n [ arrowsize=2, penwidth=2 ];
+plugin_dc:o_designer_interface_tcl:s -> synopsys_dc_synthesis:i_designer_interface_tcl:n [ arrowsize=2, penwidth=2 ];
+macros:o_dffram:s -> synopsys_dc_synthesis:i_dffram:n [ arrowsize=2, penwidth=2 ];
+plugin_dc_retime:o_retime_tcl:s -> synopsys_dc_synthesis:i_retime_tcl:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> synopsys_pt_eco:i_adk:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_signoff:o_design_pt_sdc:s -> synopsys_pt_eco:i_design_pt_sdc:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_signoff:o_design_spef_gz:s -> synopsys_pt_eco:i_design_spef_gz:n [ arrowsize=2, penwidth=2 ];
+cadence_innovus_signoff:o_design_vcs_v:s -> synopsys_pt_eco:i_design_vcs_v:n [ arrowsize=2, penwidth=2 ];
+skywater_130nm:o_adk:s -> synopsys_pt_timing_signoff:i_adk:n [ arrowsize=2, penwidth=2 ];
+signoff_posteco:o_design_pt_sdc:s -> synopsys_pt_timing_signoff:i_design_pt_sdc:n [ arrowsize=2, penwidth=2 ];
+signoff_posteco:o_design_spef_gz:s -> synopsys_pt_timing_signoff:i_design_spef_gz:n [ arrowsize=2, penwidth=2 ];
+signoff_posteco:o_design_vcs_v:s -> synopsys_pt_timing_signoff:i_design_vcs_v:n [ arrowsize=2, penwidth=2 ];
+}

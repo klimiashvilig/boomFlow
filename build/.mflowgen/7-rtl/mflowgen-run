@@ -1,0 +1,23 @@
+#! /usr/bin/env bash
+set -euo pipefail
+#=========================================================================
+# mflowgen-run
+#=========================================================================
+# Generator : /tmp/ee272b/flow/mflowgen/mflowgen/core/build_orchestrator.py
+
+# Pre
+
+rm -f .time_end
+date +%Y-%m%d-%H%M-%S > .time_start
+MFLOWGEN_STEP_HOME=$PWD
+
+# Commands
+
+cat AESTop.v rng_top.sv IOCell.v EICG_wrapper.v SPIFlashMemCtrl.sv top.mems.v top.v plusarg_reader.v ClockDividerN.sv > outputs/design.v
+cp outputs/design.v outputs/design.vcs.v
+
+# Post
+
+cd $MFLOWGEN_STEP_HOME
+date +%Y-%m%d-%H%M-%S > .time_end
+

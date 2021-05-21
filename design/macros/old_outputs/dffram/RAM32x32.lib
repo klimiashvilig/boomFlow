@@ -1,0 +1,297 @@
+library(RAM32x32) {
+
+operating_conditions(OC){
+    voltage : 1.8 ;
+    temperature : 25;
+}
+default_operating_conditions : OC;
+
+voltage_map ( VDD, 1.8 );
+voltage_map ( GND, 0 );
+
+ /* unit attributes */
+  time_unit : "1ns";
+  voltage_unit : "1V";
+  current_unit : "1uA";
+  pulling_resistance_unit : "1kohm";
+  leakage_power_unit : "1nW";
+  capacitive_load_unit(1,pf);
+
+ type (bus_3_0) { 
+   base_type : array ; 
+   data_type : bit  
+   bit_width : 4   
+   bit_from : 3  
+   bit_to : 0 ; 
+   downto : true ; 
+ } 
+ type (bus_31_0) { 
+   base_type : array ; 
+   data_type : bit  
+   bit_width : 32   
+   bit_from : 31  
+   bit_to : 0 ; 
+   downto : true ; 
+ } 
+ type (bus_4_0) { 
+   base_type : array ; 
+   data_type : bit  
+   bit_width : 5   
+   bit_from : 4  
+   bit_to : 0 ; 
+   downto : true ; 
+ } 
+
+  cell(RAM32x32) {
+    pin(CLK) { 
+	direction : input ;
+	max_transition : 2.5;
+	capacitance : 0.001; 
+    } 
+    pin(EN) { 
+	direction : input ;
+	max_transition : 2.5;
+	capacitance : 0.001; 
+    } 
+pg_pin(VPWR) {         voltage_name : VDD;         pg_type : primary_power;    }
+pg_pin(VGND) {         voltage_name : GND;         pg_type : primary_ground;    }
+    bus(WE) { 
+	bus_type : bus_3_0 ;
+	direction : input ;
+	max_transition : 2.5;
+	pin(WE[0]) { 
+		capacitance : 0.001; 
+	} 
+	pin(WE[1]) { 
+		capacitance : 0.001; 
+	} 
+	pin(WE[2]) { 
+		capacitance : 0.001; 
+	} 
+	pin(WE[3]) { 
+		capacitance : 0.001; 
+	} 
+    } 
+    bus(Di) { 
+	bus_type : bus_31_0 ;
+	direction : input ;
+	max_transition : 2.5;
+	pin(Di[0]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[1]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[2]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[3]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[4]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[5]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[6]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[7]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[8]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[9]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[10]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[11]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[12]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[13]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[14]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[15]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[16]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[17]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[18]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[19]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[20]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[21]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[22]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[23]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[24]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[25]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[26]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[27]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[28]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[29]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[30]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Di[31]) { 
+		capacitance : 0.001; 
+	} 
+    } 
+    bus(A) { 
+	bus_type : bus_4_0 ;
+	direction : input ;
+	max_transition : 2.5;
+	pin(A[0]) { 
+		capacitance : 0.001; 
+	} 
+	pin(A[1]) { 
+		capacitance : 0.001; 
+	} 
+	pin(A[2]) { 
+		capacitance : 0.001; 
+	} 
+	pin(A[3]) { 
+		capacitance : 0.001; 
+	} 
+	pin(A[4]) { 
+		capacitance : 0.001; 
+	} 
+    } 
+    bus(Do) { 
+	bus_type : bus_31_0 ;
+	direction : output ;
+	pin(Do[0]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[1]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[2]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[3]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[4]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[5]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[6]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[7]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[8]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[9]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[10]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[11]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[12]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[13]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[14]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[15]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[16]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[17]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[18]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[19]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[20]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[21]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[22]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[23]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[24]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[25]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[26]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[27]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[28]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[29]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[30]) { 
+		capacitance : 0.001; 
+	} 
+	pin(Do[31]) { 
+		capacitance : 0.001; 
+	} 
+    } 
+  } 
+} 

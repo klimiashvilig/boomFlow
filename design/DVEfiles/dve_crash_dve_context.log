@@ -1,0 +1,10 @@
+=======================DVE Context and Call Stack=========================
+Command line: /cad/synopsys/vcs/Q-2020.03-SP2/gui/dve/linux64/bin/dve.exe -full64 -vpd dump.vcd
+
+--- Stack trace follows:
+
+Received Signal 1 from: PID=735 (UID=315754)
+
+
+Process terminated by hangup.
+

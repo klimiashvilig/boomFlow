@@ -1,0 +1,16 @@
+build_dir: 7-rtl
+build_id: '7'
+commands:
+- cat AESTop.v rng_top.sv IOCell.v EICG_wrapper.v SPIFlashMemCtrl.sv top.mems.v top.v
+  plusarg_reader.v ClockDividerN.sv > outputs/design.v
+- cp outputs/design.v outputs/design.vcs.v
+edges_i: {}
+edges_o:
+  design.v:
+  - f: design.v
+    step: 9-synopsys-dc-synthesis
+name: rtl
+outputs:
+- design.v
+- design.vcs.v
+source: /tmp/ee272b/flow/Final1/design/rtl

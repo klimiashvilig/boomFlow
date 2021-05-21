@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+set -euo pipefail
+#=========================================================================
+# mflowgen-run
+#=========================================================================
+# Generator : /tmp/ee272b/flow/mflowgen/mflowgen/core/build_orchestrator.py
+
+# Pre
+
+rm -f .time_end
+date +%Y-%m%d-%H%M-%S > .time_start
+MFLOWGEN_STEP_HOME=$PWD
+export design_name=ChipTop
+export clock_period=10.0
+export construct_path=../design/construct.py
+export adk=skywater-130nm-adk
+export adk_view=view-standard
+
+# Commands
+
+echo "Design name      -- ChipTop"
+echo "Clock period     -- 10.0"
+echo "ADK              -- skywater-130nm-adk"
+echo "ADK view         -- view-standard"
+echo
+echo "Constructed from -- ../design/construct.py"
+echo
+
+# Post
+
+cd $MFLOWGEN_STEP_HOME
+date +%Y-%m%d-%H%M-%S > .time_end
+

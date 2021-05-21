@@ -1,0 +1,1 @@
+set_optimize_registers -designs {FPUFMAPipe FPToInt IntToFP FPToFP}

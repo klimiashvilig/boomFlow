@@ -1,0 +1,27 @@
+#! /usr/bin/env bash
+set -euo pipefail
+#=========================================================================
+# mflowgen-run
+#=========================================================================
+# Generator : /tmp/ee272b/flow/mflowgen/mflowgen/core/build_orchestrator.py
+
+# Pre
+
+rm -f .time_end
+date +%Y-%m%d-%H%M-%S > .time_start
+MFLOWGEN_STEP_HOME=$PWD
+export design_name=ChipTop
+export eco_types=power,drc_max_transition,drc_max_capacitance,drc_max_fanout,drc_noise,drc_cell_em,timing,leakage
+export order=designer-interface.tcl,read-design.tcl,fix-eco.tcl
+export setup_margin=0.0
+export hold_margin=0.0
+
+# Commands
+
+pt_shell -file START.tcl
+
+# Post
+
+cd $MFLOWGEN_STEP_HOME
+date +%Y-%m%d-%H%M-%S > .time_end
+

@@ -1,0 +1,18 @@
+build_dir: 23-open-icc2innovus
+build_id: '23'
+commands:
+- python3 icc2innovus.py
+edges_i:
+  icc_eco.tcl:
+  - f: icc_eco.tcl
+    step: 22-synopsys-pt-eco
+edges_o:
+  innovus_eco.tcl:
+  - f: innovus_eco.tcl
+    step: 26-cadence-innovus-eco
+inputs:
+- icc_eco.tcl
+name: open-icc2innovus
+outputs:
+- innovus_eco.tcl
+source: /tmp/ee272b/flow/mflowgen/steps/open-icc2innovus

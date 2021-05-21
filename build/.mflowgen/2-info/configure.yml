@@ -1,0 +1,20 @@
+build_dir: 2-info
+build_id: '2'
+commands:
+- echo "Design name      -- ChipTop"
+- echo "Clock period     -- 10.0"
+- echo "ADK              -- skywater-130nm-adk"
+- echo "ADK view         -- view-standard"
+- echo
+- echo "Constructed from -- ../design/construct.py"
+- echo
+edges_i: {}
+edges_o: {}
+name: info
+parameters:
+  adk: skywater-130nm-adk
+  adk_view: view-standard
+  clock_period: 10.0
+  construct_path: ../design/construct.py
+  design_name: ChipTop
+source: /tmp/ee272b/flow/mflowgen/steps/info

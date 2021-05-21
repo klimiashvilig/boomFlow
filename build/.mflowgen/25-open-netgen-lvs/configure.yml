@@ -1,0 +1,27 @@
+build_dir: 25-open-netgen-lvs
+build_id: '25'
+commands:
+- v2lvs -i -lsp inputs/adk/stdcells.spi -s inputs/adk/stdcells.spi -v inputs/design.lvs.v
+  -o design_lvs.spice
+- sh run_lvs.sh
+edges_i:
+  adk:
+  - f: adk
+    step: 8-skywater-130nm
+  design.lvs.v:
+  - f: design.lvs.v
+    step: 19-cadence-innovus-signoff
+  design_extracted.spice:
+  - f: design_extracted.spice
+    step: 21-open-magic-def2spice
+edges_o: {}
+inputs:
+- adk
+- design_extracted.spice
+- design.lvs.v
+name: open-netgen-lvs
+outputs:
+- lvs_results.log
+parameters:
+  design_name: ChipTop
+source: /tmp/ee272b/flow/Final1/design/open-netgen-lvs

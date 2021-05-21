@@ -1,0 +1,31 @@
+build_dir: 28-synopsys-pt-timing-signoff
+build_id: '28'
+commands:
+- pt_shell -file pt.tcl
+- mkdir -p outputs && cd outputs
+- ln -sf ../design.sdf design.sdf
+edges_i:
+  adk:
+  - f: adk
+    step: 8-skywater-130nm
+  design.pt.sdc:
+  - f: design.pt.sdc
+    step: 27-signoff_posteco
+  design.spef.gz:
+  - f: design.spef.gz
+    step: 27-signoff_posteco
+  design.vcs.v:
+  - f: design.vcs.v
+    step: 27-signoff_posteco
+edges_o: {}
+inputs:
+- adk
+- design.vcs.v
+- design.pt.sdc
+- design.spef.gz
+name: synopsys-pt-timing-signoff
+outputs:
+- design.sdf
+parameters:
+  design_name: ChipTop
+source: /tmp/ee272b/flow/mflowgen/steps/synopsys-pt-timing-signoff

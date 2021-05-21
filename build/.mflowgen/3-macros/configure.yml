@@ -1,0 +1,19 @@
+build_dir: 3-macros
+build_id: '3'
+commands:
+- 'true'
+edges_i: {}
+edges_o:
+  dffram:
+  - f: dffram
+    step: 9-synopsys-dc-synthesis
+  - f: dffram
+    step: 10-cadence-innovus-flowsetup
+  - f: dffram
+    step: 11-cadence-innovus-init
+  - f: dffram
+    step: 21-open-magic-def2spice
+name: macros
+outputs:
+- dffram
+source: /tmp/ee272b/flow/Final1/design/macros

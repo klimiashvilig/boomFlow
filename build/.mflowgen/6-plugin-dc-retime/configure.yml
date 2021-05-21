@@ -1,0 +1,13 @@
+build_dir: 6-plugin-dc-retime
+build_id: '6'
+commands:
+- 'true'
+edges_i: {}
+edges_o:
+  retime.tcl:
+  - f: retime.tcl
+    step: 9-synopsys-dc-synthesis
+name: plugin-dc-retime
+outputs:
+- retime.tcl
+source: /tmp/ee272b/flow/Final1/design/plugin-dc-retime

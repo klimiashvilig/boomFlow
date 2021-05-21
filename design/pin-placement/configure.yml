@@ -1,0 +1,6 @@
+name: pin-placement
+
+outputs:
+  - pin-assignments.tcl
+commands: 
+  - cat pin-assignments.tcl > outputs/pin-assignments.tcl

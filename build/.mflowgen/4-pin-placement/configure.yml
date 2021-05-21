@@ -1,0 +1,13 @@
+build_dir: 4-pin-placement
+build_id: '4'
+commands:
+- cat pin-assignments.tcl > outputs/pin-assignments.tcl
+edges_i: {}
+edges_o:
+  pin-assignments.tcl:
+  - f: pin-assignments.tcl
+    step: 11-cadence-innovus-init
+name: pin-placement
+outputs:
+- pin-assignments.tcl
+source: /tmp/ee272b/flow/Final1/design/pin-placement

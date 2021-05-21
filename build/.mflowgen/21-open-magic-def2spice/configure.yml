@@ -1,0 +1,34 @@
+build_dir: 21-open-magic-def2spice
+build_id: '21'
+commands:
+- cp inputs/adk/magicrc .magicrc
+- cp inputs/adk/rtk-tech.lef rtk-tech-nolicon.lef
+- sed -i '/LAYER licon/,/END licon/d' rtk-tech-nolicon.lef
+- cp -L inputs/design.def.gz design.def.gz
+- gunzip design.def.gz
+- sed -i 's/\//____/g' design.def
+- magic -noconsole -dnull extract.tcl | tee def2spice.log
+edges_i:
+  adk:
+  - f: adk
+    step: 8-skywater-130nm
+  design.def.gz:
+  - f: design.def.gz
+    step: 19-cadence-innovus-signoff
+  dffram:
+  - f: dffram
+    step: 3-macros
+edges_o:
+  design_extracted.spice:
+  - f: design_extracted.spice
+    step: 25-open-netgen-lvs
+inputs:
+- adk
+- design.def.gz
+- dffram
+name: open-magic-def2spice
+outputs:
+- design_extracted.spice
+parameters:
+  design_name: ChipTop
+source: /tmp/ee272b/flow/Final1/design/open-magic-def2spice
