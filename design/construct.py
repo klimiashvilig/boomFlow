@@ -98,7 +98,7 @@ def construct():
   route           = Step( 'cadence-innovus-route',         default=True )
   postroute       = Step( 'cadence-innovus-postroute',     default=True )
   postroute_hold   = Step( 'cadence-innovus-postroute_hold', default=True)
-  gdsmerge        = Step( 'mentor-calibre-gdsmerge',       default=True )
+  gdsmerge        = Step( this_dir +  '/mentor-calibre-gdsmerge' )
   synopsys_pt_eco = Step( 'synopsys-pt-eco', default=True)
   open_icc2innovus = Step('open-icc2innovus', default=True)
   cadence_innovus_eco = Step('cadence-innovus-eco', default=True)
@@ -203,6 +203,8 @@ def construct():
   init.extend_inputs(['floorplan.tcl', 'pin-assignments.tcl'])
   # magic_def2spice.extend_inputs(macros.all_outputs())
 
+  gdsmerge.extend_inputs(macros.all_outputs())
+  g.connect_by_name(macros, gdsmerge)
 
   g.connect_by_name( plugin_dc       ,dc              )
   g.connect_by_name( macros          ,dc              )
@@ -246,6 +248,7 @@ def construct():
   g.connect_by_name( postroute,       postroute_hold  )
   g.connect_by_name( postroute_hold,  signoff         )
   g.connect_by_name( signoff,         gdsmerge        )
+  g.connect_by_name( postroute_hold,  cadence_innovus_eco    )
   
   # # DRC, LVS, timing signoff and power signoff
   g.connect_by_name( gdsmerge,        magic_drc       )
@@ -291,7 +294,7 @@ def construct():
   dc.set_param('flatten_effort', 2)
 
   #postroute_hold.set_param('hold_target_slack', 0.2)
-  #synopsys_pt_eco.set_param('eco_types', ['timing'])
+  synopsys_pt_eco.set_param('eco_types', ['timing'])
 
   return g
 

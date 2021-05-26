@@ -59,68 +59,17 @@
 `define OENB_INIT 1'b1
 
 `endif // __GLOBAL_DEFINE_H
-// SPDX-FileCopyrightText: 2020 Efabless Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// SPDX-License-Identifier: Apache-2.0
-
-`default_nettype wire
-`ifndef SYNTHESIS
-
-module DFFRAM
-#(
-  parameter COLS = 1
-)(
-`ifdef USE_POWER_PINS
-    input VPWR,
-    input VGND,
-`endif
-    input CLK,
-    input [3:0] WE,
-    input EN,
-    input [31:0] Di,
-    output reg [31:0] Do,
-    input [7+$clog2(COLS):0] A
-);
-  
-
-reg [31:0] mem [0:`MEM_WORDS-1];
-
-always @(posedge CLK) begin
-    if (EN == 1'b1) begin
-        Do <= mem[A];
-        if (WE[0]) mem[A][ 7: 0] <= Di[ 7: 0];
-        if (WE[1]) mem[A][15: 8] <= Di[15: 8];
-        if (WE[2]) mem[A][23:16] <= Di[23:16];
-        if (WE[3]) mem[A][31:24] <= Di[31:24];
-    end
-end
-endmodule
-
-`endif
 
 
 
-
-
-module dffram_wrapper256
+module dffram_wrapper
 #(
   parameter DATA_WIDTH = 8,
   parameter ADDR_WIDTH = 7,
   parameter DEPTH = 128
 )(
   input CLK,
-  input [ ( (DATA_WIDTH + 8 - 1) / 8) - 1: 0] WE,
+  input [( (DATA_WIDTH + 8 - 1) / 8) - 1 : 0]WE,
   input EN,
   input [ADDR_WIDTH - 1 : 0] A,
   input [DATA_WIDTH - 1 : 0] Di,
@@ -149,33 +98,28 @@ module dffram_wrapper256
   genvar x, y; 
   
   generate
-    if (DEPTH == 256) begin
+    if (DEPTH == 8) begin
 
       wire [DATA_WIDTH : 0] rdata_w;
-      reg  [ADDR_WIDTH - 1 : 0] radr_r;
-
-      always @ (posedge CLK) begin
-        radr_r <= A;
-      end
 
       for (x = 0; x < DATA_WIDTH/32; x = x + 1) begin: width_macro
           wire [3:0] bank_WE;
           assign bank_WE = WE[4*(x+1)-1 : 4*x];
-          DFFRAM sram (
+          RAM8x32 dffram (
             .CLK(CLK),
             .WE(bank_WE),
             .EN(EN),
             .Di(Di[32*(x+1)-1 : 32*x]),
             .Do(rdata_w[32*(x+1)-1 : 32*x]),
-            .A(A[ 7:0 ])
+            .A(A[ 2:0 ])
           );
       end
 
       assign Do = rdata_w;
 
-    end else begin
+    end else if (DEPTH < 32) begin
 
-      wire [DATA_WIDTH : 0] rdata_w [DEPTH/256 - 1 : 0];
+      wire [DATA_WIDTH : 0] rdata_w [DEPTH/8 - 1 : 0];
       reg  [ADDR_WIDTH - 1 : 0] radr_r;
 
       always @ (posedge CLK) begin
@@ -183,32 +127,152 @@ module dffram_wrapper256
       end
 
       for (x = 0; x < DATA_WIDTH/32; x = x + 1) begin: width_macro
-        for (y = 0; y < DEPTH/256; y = y + 1) begin: depth_macro
-          wire [ADDR_WIDTH - 9 : 0] bank;
-          wire bank_match;
-          assign bank = A[ ADDR_WIDTH-1 : 8 ];
-          assign bank_match = bank == y;
-          wire [3:0] bank_match_extended;
-          assign bank_match_extended = {4{bank_match}};
-          wire [3:0] bank_WE;
-          assign bank_WE = WE[4*(x+1)-1 : 4*x];
-          DFFRAM sram (
+        for (y = 0; y < DEPTH/8; y = y + 1) begin: depth_macro
+          RAM8x32 dffram (
             .CLK(CLK),
-            .WE(bank_WE & bank_match_extended),
+            .WE(WE[4*(x+1)-1 : 4*x] & {4{(A[ ADDR_WIDTH-1 : 3 ] == y)}}),
             .EN(EN),
             .Di(Di[32*(x+1)-1 : 32*x]),
             .Do(rdata_w[y][32*(x+1)-1 : 32*x]),
-            .A(A[ 7:0 ])
+            .A(A[ 2:0 ])
           );
         end
       end
 
       assign Do = rdata_w[radr_r[ADDR_WIDTH - 1 : 3]];
 
+    end else if  (DEPTH == 32) begin
+      
+      wire [DATA_WIDTH : 0] rdata_w;
+
+      for (x = 0; x < DATA_WIDTH/32; x = x + 1) begin: width_macro
+        RAM32x32 dffram (
+          .CLK(CLK),
+          .WE(WE[4*(x+1)-1 : 4*x]),
+          .EN(EN),
+          .Di(Di[32*(x+1)-1 : 32*x]),
+          .Do(rdata_w[32*(x+1)-1 : 32*x]),
+          .A(A[ 4:0 ])
+        );
+      end
+
+      assign Do = rdata_w;
+
+    end else if (DEPTH < 128) begin
+
+      wire [DATA_WIDTH : 0] rdata_w [DEPTH/32 - 1 : 0];
+      reg  [ADDR_WIDTH - 1 : 0] radr_r;
+
+      always @ (posedge CLK) begin
+        radr_r <= A;
+      end
+
+      for (x = 0; x < DATA_WIDTH/32; x = x + 1) begin: width_macro
+        for (y = 0; y < DEPTH/32; y = y + 1) begin: depth_macro
+          RAM32x32 dffram (
+            .CLK(CLK),
+            .WE(WE[4*(x+1)-1 : 4*x] & {4{(A[ ADDR_WIDTH-1 : 5 ] == y)}}),
+            .EN(EN),
+            .Di(Di[32*(x+1)-1 : 32*x]),
+            .Do(rdata_w[y][32*(x+1)-1 : 32*x]),
+            .A(A[ 4:0 ])
+          );
+        end
+      end
+
+      assign Do = rdata_w[radr_r[ADDR_WIDTH - 1 : 5]];
+      
+    end else if (DEPTH == 128) begin
+
+      wire [DATA_WIDTH : 0] rdata_w ;
+
+      for (x = 0; x < DATA_WIDTH/32; x = x + 1) begin: width_macro
+        RAM128x32 dffram (
+          .CLK(CLK),
+          .WE(WE[4*(x+1)-1 : 4*x]),
+          .EN(EN),
+          .Di(Di[32*(x+1)-1 : 32*x]),
+          .Do(rdata_w[32*(x+1)-1 : 32*x]),
+          .A(A[ 6:0 ])
+        );
+      end
+
+      assign Do = rdata_w;
+      
+    end else if (DEPTH < 512) begin
+
+      wire [DATA_WIDTH : 0] rdata_w [DEPTH/128 - 1 : 0];
+      reg  [ADDR_WIDTH - 1 : 0] radr_r;
+
+      always @ (posedge CLK) begin
+        radr_r <= A;
+      end
+
+      for (x = 0; x < DATA_WIDTH/32; x = x + 1) begin: width_macro
+        for (y = 0; y < DEPTH/128; y = y + 1) begin: depth_macro
+          RAM128x32 dffram (
+            .CLK(CLK),
+            .WE(WE[4*(x+1)-1 : 4*x] & {4{(A[ ADDR_WIDTH-1 : 7 ] == y)}}),
+            .EN(EN),
+            .Di(Di[32*(x+1)-1 : 32*x]),
+            .Do(rdata_w[y][32*(x+1)-1 : 32*x]),
+            .A(A[ 6:0 ])
+          );
+        end
+      end
+
+      assign Do = rdata_w[radr_r[ADDR_WIDTH - 1 : 7]];
+
+  
+    end else if (DEPTH == 512) begin
+
+      wire [DATA_WIDTH : 0] rdata_w;
+
+      for (x = 0; x < DATA_WIDTH/32; x = x + 1) begin: width_macro
+        RAM512x32 dffram (
+          .CLK(CLK),
+          .WE(WE[4*(x+1)-1 : 4*x]),
+          .EN(EN),
+          .Di(Di[32*(x+1)-1 : 32*x]),
+          .Do(rdata_w[32*(x+1)-1 : 32*x]),
+          .A(A[ 8:0 ])
+        );
+      end
+
+      assign Do = rdata_w;
+
+    end else begin
+
+      wire [DATA_WIDTH : 0] rdata_w [DEPTH/512 - 1 : 0];
+      reg  [ADDR_WIDTH - 1 : 0] radr_r;
+
+      always @ (posedge CLK) begin
+        radr_r <= A;
+      end
+
+      for (x = 0; x < DATA_WIDTH/32; x = x + 1) begin: width_macro
+        for (y = 0; y < DEPTH/512; y = y + 1) begin: depth_macro
+          RAM512x32 dffram (
+            .CLK(CLK),
+            .WE(WE[4*(x+1)-1 : 4*x] & {4{(A[ ADDR_WIDTH-1 : 9 ] == y)}}),
+            .EN(EN),
+            .Di(Di[32*(x+1)-1 : 32*x]),
+            .Do(rdata_w[y][32*(x+1)-1 : 32*x]),
+            .A(A[ 8:0 ])
+          );
+        end
+      end
+
+      assign Do = rdata_w[radr_r[ADDR_WIDTH - 1 : 9]];
+      
     end
+      
   endgenerate
   
 endmodule
+
+
+
 /* 
 	DFFRFile
 	32x32 Register File with 2RW1W ports and clock gating for SKY130A 
@@ -667,28 +731,22 @@ module cc_banks_0_ext( // @[anonymous source 78:2]
   input         RW0_en, // @[anonymous source 83:4]
   input         RW0_wmode // @[anonymous source 84:4]
 );
-  wire [5:0] mem_0_0_RW0_addr; // @[anonymous source 86:4]
-  wire  mem_0_0_RW0_clk; // @[anonymous source 86:4]
-  wire [63:0] mem_0_0_RW0_wdata; // @[anonymous source 86:4]
-  wire [63:0] mem_0_0_RW0_rdata; // @[anonymous source 86:4]
-  wire  mem_0_0_RW0_en; // @[anonymous source 86:4]
-  wire  mem_0_0_RW0_wmode; // @[anonymous source 86:4]
-  wire [63:0] RW0_rdata_0_0 = mem_0_0_RW0_rdata; // @[anonymous source 89:4]
-  wire [63:0] RW0_rdata_0 = RW0_rdata_0_0; // @[anonymous source 89:4]
-  split_cc_banks_0_ext mem_0_0 ( // @[anonymous source 86:4]
-    .RW0_addr(mem_0_0_RW0_addr),
-    .RW0_clk(mem_0_0_RW0_clk),
-    .RW0_wdata(mem_0_0_RW0_wdata),
-    .RW0_rdata(mem_0_0_RW0_rdata),
-    .RW0_en(mem_0_0_RW0_en),
-    .RW0_wmode(mem_0_0_RW0_wmode)
-  );
-  assign RW0_rdata = mem_0_0_RW0_rdata; // @[anonymous source 89:4]
-  assign mem_0_0_RW0_addr = RW0_addr; // @[anonymous source 88:4]
-  assign mem_0_0_RW0_clk = RW0_clk; // @[anonymous source 87:4]
-  assign mem_0_0_RW0_wdata = RW0_wdata; // @[anonymous source 90:4]
-  assign mem_0_0_RW0_en = RW0_en; // @[anonymous source 92:4]
-  assign mem_0_0_RW0_wmode = RW0_wmode; // @[anonymous source 91:4]
+
+dffram_wrapper
+#(
+	.DATA_WIDTH(64),
+	.ADDR_WIDTH(6),
+	.DEPTH(64)
+) dffram (
+	.CLK(RW0_clk),
+	.WE({8{RW0_wmode}}),
+	.EN(RW0_en),
+	.A(RW0_addr),
+	.Di(RW0_wdata),
+	.Do(RW0_rdata)
+);
+
+
 endmodule
 module tag_array_ext( // @[anonymous source 96:2]
   input  [1:0]  RW0_addr, // @[anonymous source 97:4]
@@ -733,28 +791,22 @@ module dataArrayWay_0_ext( // @[anonymous source 116:2]
   input         RW0_en, // @[anonymous source 121:4]
   input         RW0_wmode // @[anonymous source 122:4]
 );
-  wire [4:0] mem_0_0_RW0_addr; // @[anonymous source 124:4]
-  wire  mem_0_0_RW0_clk; // @[anonymous source 124:4]
-  wire [63:0] mem_0_0_RW0_wdata; // @[anonymous source 124:4]
-  wire [63:0] mem_0_0_RW0_rdata; // @[anonymous source 124:4]
-  wire  mem_0_0_RW0_en; // @[anonymous source 124:4]
-  wire  mem_0_0_RW0_wmode; // @[anonymous source 124:4]
-  wire [63:0] RW0_rdata_0_0 = mem_0_0_RW0_rdata; // @[anonymous source 127:4]
-  wire [63:0] RW0_rdata_0 = RW0_rdata_0_0; // @[anonymous source 127:4]
-  split_dataArrayWay_0_ext mem_0_0 ( // @[anonymous source 124:4]
-    .RW0_addr(mem_0_0_RW0_addr),
-    .RW0_clk(mem_0_0_RW0_clk),
-    .RW0_wdata(mem_0_0_RW0_wdata),
-    .RW0_rdata(mem_0_0_RW0_rdata),
-    .RW0_en(mem_0_0_RW0_en),
-    .RW0_wmode(mem_0_0_RW0_wmode)
-  );
-  assign RW0_rdata = mem_0_0_RW0_rdata; // @[anonymous source 127:4]
-  assign mem_0_0_RW0_addr = RW0_addr; // @[anonymous source 126:4]
-  assign mem_0_0_RW0_clk = RW0_clk; // @[anonymous source 125:4]
-  assign mem_0_0_RW0_wdata = RW0_wdata; // @[anonymous source 128:4]
-  assign mem_0_0_RW0_en = RW0_en; // @[anonymous source 130:4]
-  assign mem_0_0_RW0_wmode = RW0_wmode; // @[anonymous source 129:4]
+
+dffram_wrapper
+#(
+	.DATA_WIDTH(64),
+	.ADDR_WIDTH(5),
+	.DEPTH(32)
+) dffram (
+	.CLK(RW0_clk),
+	.WE({8{RW0_wmode}}),
+	.EN(RW0_en),
+	.A(RW0_addr),
+	.Di(RW0_wdata),
+	.Do(RW0_rdata)
+);
+
+
 endmodule
 module tag_array_0_ext( // @[anonymous source 134:2]
   input  [2:0]  RW0_addr, // @[anonymous source 135:4]
@@ -993,8 +1045,64 @@ module dataArrayWay_0_0_ext( // @[anonymous source 240:2]
   split_dataArrayWay_0_0_ext mem_0_0 ( // @[anonymous source 248:4]
     .RW0_addr(mem_0_0_RW0_addr),
     .RW0_clk(mem_0_0_RW0_clk),
-    .RW0_wdata(mem_0_0_RW0_wdata),
-    .RW0_rdata(mem_0_0_RW0_rdata),
+    .RW0_wdata(mem_0_0_RW0_wdata[511:448]),
+    .RW0_rdata(mem_0_0_RW0_rdata[511:448]),
+    .RW0_en(mem_0_0_RW0_en),
+    .RW0_wmode(mem_0_0_RW0_wmode)
+  );
+  split_dataArrayWay_0_0_ext mem_0_1 ( // @[anonymous source 248:4]
+    .RW0_addr(mem_0_0_RW0_addr),
+    .RW0_clk(mem_0_0_RW0_clk),
+    .RW0_wdata(mem_0_0_RW0_wdata[447:384]),
+    .RW0_rdata(mem_0_0_RW0_rdata[447:384]),
+    .RW0_en(mem_0_0_RW0_en),
+    .RW0_wmode(mem_0_0_RW0_wmode)
+  );
+  split_dataArrayWay_0_0_ext mem_0_2 ( // @[anonymous source 248:4]
+    .RW0_addr(mem_0_0_RW0_addr),
+    .RW0_clk(mem_0_0_RW0_clk),
+    .RW0_wdata(mem_0_0_RW0_wdata[383:320]),
+    .RW0_rdata(mem_0_0_RW0_rdata[383:320]),
+    .RW0_en(mem_0_0_RW0_en),
+    .RW0_wmode(mem_0_0_RW0_wmode)
+  );
+  split_dataArrayWay_0_0_ext mem_0_3 ( // @[anonymous source 248:4]
+    .RW0_addr(mem_0_0_RW0_addr),
+    .RW0_clk(mem_0_0_RW0_clk),
+    .RW0_wdata(mem_0_0_RW0_wdata[319:256]),
+    .RW0_rdata(mem_0_0_RW0_rdata[319:256]),
+    .RW0_en(mem_0_0_RW0_en),
+    .RW0_wmode(mem_0_0_RW0_wmode)
+  );
+  split_dataArrayWay_0_0_ext mem_0_4 ( // @[anonymous source 248:4]
+    .RW0_addr(mem_0_0_RW0_addr),
+    .RW0_clk(mem_0_0_RW0_clk),
+    .RW0_wdata(mem_0_0_RW0_wdata[255:192]),
+    .RW0_rdata(mem_0_0_RW0_rdata[255:192]),
+    .RW0_en(mem_0_0_RW0_en),
+    .RW0_wmode(mem_0_0_RW0_wmode)
+  );
+  split_dataArrayWay_0_0_ext mem_0_5 ( // @[anonymous source 248:4]
+    .RW0_addr(mem_0_0_RW0_addr),
+    .RW0_clk(mem_0_0_RW0_clk),
+    .RW0_wdata(mem_0_0_RW0_wdata[191:128]),
+    .RW0_rdata(mem_0_0_RW0_rdata[191:128]),
+    .RW0_en(mem_0_0_RW0_en),
+    .RW0_wmode(mem_0_0_RW0_wmode)
+  );
+  split_dataArrayWay_0_0_ext mem_0_6 ( // @[anonymous source 248:4]
+    .RW0_addr(mem_0_0_RW0_addr),
+    .RW0_clk(mem_0_0_RW0_clk),
+    .RW0_wdata(mem_0_0_RW0_wdata[127:64]),
+    .RW0_rdata(mem_0_0_RW0_rdata[127:64]),
+    .RW0_en(mem_0_0_RW0_en),
+    .RW0_wmode(mem_0_0_RW0_wmode)
+  );
+  split_dataArrayWay_0_0_ext mem_0_7 ( // @[anonymous source 248:4]
+    .RW0_addr(mem_0_0_RW0_addr),
+    .RW0_clk(mem_0_0_RW0_clk),
+    .RW0_wdata(mem_0_0_RW0_wdata[63:0]),
+    .RW0_rdata(mem_0_0_RW0_rdata[63:0]),
     .RW0_en(mem_0_0_RW0_en),
     .RW0_wmode(mem_0_0_RW0_wmode)
   );
@@ -1289,28 +1397,23 @@ module l2_tlb_ram_ext( // @[anonymous source 652:2]
   input         RW0_en, // @[anonymous source 657:4]
   input         RW0_wmode // @[anonymous source 658:4]
 );
-  wire [5:0] mem_0_0_RW0_addr; // @[anonymous source 660:4]
-  wire  mem_0_0_RW0_clk; // @[anonymous source 660:4]
-  wire [47:0] mem_0_0_RW0_wdata; // @[anonymous source 660:4]
-  wire [47:0] mem_0_0_RW0_rdata; // @[anonymous source 660:4]
-  wire  mem_0_0_RW0_en; // @[anonymous source 660:4]
-  wire  mem_0_0_RW0_wmode; // @[anonymous source 660:4]
-  wire [47:0] RW0_rdata_0_0 = mem_0_0_RW0_rdata; // @[anonymous source 663:4]
-  wire [47:0] RW0_rdata_0 = RW0_rdata_0_0; // @[anonymous source 663:4]
-  split_l2_tlb_ram_ext mem_0_0 ( // @[anonymous source 660:4]
-    .RW0_addr(mem_0_0_RW0_addr),
-    .RW0_clk(mem_0_0_RW0_clk),
-    .RW0_wdata(mem_0_0_RW0_wdata),
-    .RW0_rdata(mem_0_0_RW0_rdata),
-    .RW0_en(mem_0_0_RW0_en),
-    .RW0_wmode(mem_0_0_RW0_wmode)
-  );
-  assign RW0_rdata = mem_0_0_RW0_rdata; // @[anonymous source 663:4]
-  assign mem_0_0_RW0_addr = RW0_addr; // @[anonymous source 662:4]
-  assign mem_0_0_RW0_clk = RW0_clk; // @[anonymous source 661:4]
-  assign mem_0_0_RW0_wdata = RW0_wdata; // @[anonymous source 664:4]
-  assign mem_0_0_RW0_en = RW0_en; // @[anonymous source 666:4]
-  assign mem_0_0_RW0_wmode = RW0_wmode; // @[anonymous source 665:4]
+
+wire [15:0] temp;
+
+dffram_wrapper
+#(
+	.DATA_WIDTH(64),
+	.ADDR_WIDTH(6),
+	.DEPTH(64)
+) dffram (
+	.CLK(RW0_clk),
+	.WE({8{RW0_wmode}}),
+	.EN(RW0_en),
+	.A(RW0_addr),
+	.Di({16'b0, RW0_wdata}),
+	.Do({temp, RW0_rdata})
+);
+
 endmodule
 module mem_ext( // @[anonymous source 670:2]
   input  [9:0]  RW0_addr, // @[anonymous source 671:4]
@@ -1322,7 +1425,7 @@ module mem_ext( // @[anonymous source 670:2]
   input  [7:0]  RW0_wmask // @[anonymous source 677:4]
 );
 
-dffram_wrapper256
+dffram_wrapper
 #(
 	.DATA_WIDTH(64),
 	.ADDR_WIDTH(10),
@@ -2014,22 +2117,22 @@ endmodule
 module split_dataArrayWay_0_0_ext( // @[anonymous source 922:2]
   input          RW0_addr, // @[anonymous source 923:4]
   input          RW0_clk, // @[anonymous source 924:4]
-  input  [511:0] RW0_wdata, // @[anonymous source 925:4]
-  output [511:0] RW0_rdata, // @[anonymous source 926:4]
+  input  [63:0] RW0_wdata, // @[anonymous source 925:4]
+  output [63:0] RW0_rdata, // @[anonymous source 926:4]
   input          RW0_en, // @[anonymous source 927:4]
   input          RW0_wmode // @[anonymous source 928:4]
 );
 `ifdef RANDOMIZE_MEM_INIT
-  reg [511:0] _RAND_0;
+  reg [63:0] _RAND_0;
 `endif // RANDOMIZE_MEM_INIT
 `ifdef RANDOMIZE_REG_INIT
   reg [31:0] _RAND_1;
   reg [31:0] _RAND_2;
 `endif // RANDOMIZE_REG_INIT
-  reg [511:0] ram [0:0]; // @[anonymous source 930:4]
-  wire [511:0] ram_RW_0_r_data; // @[anonymous source 930:4]
+  reg [63:0] ram [0:0]; // @[anonymous source 930:4]
+  wire [63:0] ram_RW_0_r_data; // @[anonymous source 930:4]
   wire  ram_RW_0_r_addr; // @[anonymous source 930:4]
-  wire [511:0] ram_RW_0_w_data; // @[anonymous source 930:4]
+  wire [63:0] ram_RW_0_w_data; // @[anonymous source 930:4]
   wire  ram_RW_0_w_addr; // @[anonymous source 930:4]
   wire  ram_RW_0_w_mask; // @[anonymous source 930:4]
   wire  ram_RW_0_w_en; // @[anonymous source 930:4]
@@ -2091,7 +2194,7 @@ initial begin
 `ifdef RANDOMIZE_MEM_INIT
   _RAND_0 = {16{`RANDOM}};
   for (initvar = 0; initvar < 1; initvar = initvar+1)
-    ram[initvar] = _RAND_0[511:0];
+    ram[initvar] = _RAND_0[63:0];
 `endif // RANDOMIZE_MEM_INIT
 `ifdef RANDOMIZE_REG_INIT
   _RAND_1 = {1{`RANDOM}};
